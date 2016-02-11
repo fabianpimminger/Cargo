@@ -7,7 +7,7 @@ use FabianPimminger\Cargo\PathGenerators\PathGeneratorFactory;
 use FabianPimminger\Cargo\Exceptions\FileNotSetException;
 use FabianPimminger\Cargo\Exceptions\AttachmentContentNotRecognizedException;
 
-class AttachmentUploader implements AttachmentInterface
+class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInterface
 {
     
     private $instance;
@@ -85,7 +85,7 @@ class AttachmentUploader implements AttachmentInterface
         return ".".$this->config["format"];
     }
     
-    public function uploadFile()
+    public function process()
     {
                 
         if(empty($this->file)) {

@@ -24,10 +24,6 @@ class Attachment implements AttachmentInterface
         $this->config = $instance->getAttachmentConfig($name);
         
         $this->fileName = $this->getInstanceModelAttribute($this->config["fields"]["file_name"]);
-        
-        if (empty($this->fileName)) {
-           throw new AttachmentNotExistsException(); 
-        }
                 
     }   
     
@@ -68,12 +64,13 @@ class Attachment implements AttachmentInterface
 
     public function getMissingUrl()
     {
-        if(empty($this->config["missing_file_name"])){
+        
+        if(empty($this->config["missing_filename"])){
             return null;
         }else{            
             $urlGenerator = UrlGeneratorFactory::create();
             
-            return $urlGenerator->getUrl($this, $this->config["missing_file_name"], true);            
+            return $urlGenerator->getUrl($this, $this->config["missing_filename"], true);            
         }
     }        
             

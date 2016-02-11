@@ -4,21 +4,29 @@ namespace FabianPimminger\Cargo\Traits;
 
 use FabianPimminger\Cargo\Attachment;
 use FabianPimminger\Cargo\AttachmentUploader;
+use FabianPimminger\Cargo\AttachmentDeleter;
 use FabianPimminger\Exceptions\AttachmentIsNotRegisteredException;
 
 trait HasAttachmentTrait 
 {
     
-    protected $attachmentsToUpload = [];
+    protected $attachmentsToProcess = [];
     
     abstract public function registeredAttachments();
         
     public static function bootHasAttachmentTrait()
     {
-        static::saved(function($instance){
+        static::saved(function($instance)
+        {
             
-            $instance->saveAttachments();
+            $instance->processAttachments();
                     
+        });
+        
+        
+        static::deleting(function($instance) 
+        {
+            $instance->deleteAttachments();
         });
     }
 
@@ -71,25 +79,38 @@ trait HasAttachmentTrait
     {
         if ($this->hasRegisteredAttachment($key)) {            
             if ($value) {
-                $this->attachmentsToUpload[$key] = new AttachmentUploader($key, $value, $this);;  
+                $this->attachmentsToProcess[$key] = new AttachmentUploader($key, $value, $this);  
+            }
+            
+            if (is_null($value)) {
+               $this->attachmentsToProcess[$key] = new AttachmentDeleter($key, $this); 
             }
             return;
         }
         parent::setAttribute($key, $value);
     }    
     
-    public function saveAttachments()
+    public function processAttachments()
     {
         
-        $toUpload = $this->attachmentsToUpload;
-        $this->attachmentsToUpload = [];
+        $toProcess = $this->attachmentsToProcess;
+        $this->attachmentsToProcess = [];
         
-        foreach ($toUpload as $attachment) {
+        foreach ($toProcess as $attachment) {
             
-            $attachment->uploadFile();
+            $attachment->process();
             
         }
         
+    }
+    
+    public function deleteAttachments()
+    {
+        foreach($this->registeredAttachments() as $key => $attachment){
+            $this->attachmentsToProcess[$key] = new AttachmentDeleter($key, $this); 
+        }
+        
+        $this->processAttachments();
     }
 
 }
