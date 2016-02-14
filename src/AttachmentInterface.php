@@ -12,5 +12,5 @@ interface AttachmentInterface
     public function getFolder();    
     
     public function getFileName();
-
+    
 }    

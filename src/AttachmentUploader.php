@@ -91,6 +91,15 @@ class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInte
         if(empty($this->file)) {
             throw new FileNotSetException();
         }
+        
+        // delete old files
+        
+        if($this->instance->getAttribute($this->name) != null) {
+            $attachmentDeleter = new AttachmentDeleter($this->name, $this->instance);
+            $attachmentDeleter->process();
+        }
+       
+        // upload new files
             
         $this->writeFiles();
         
