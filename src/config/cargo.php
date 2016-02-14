@@ -12,7 +12,7 @@ return [
     
     "max_file_size" => 1024 * 3,
 
-    "custom_url_generator_class" => \FabianPimminger\Cargo\UrlGenerators\AzureUrlGenerator::class,
+    "custom_url_generator_class" => null,
     
     "custom_path_generator_class" => null,    
     
