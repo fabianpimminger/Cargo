@@ -75,7 +75,7 @@ class AttachmentDeleter implements AttachmentInterface, AttachmentProcessorInter
         if (\Storage::disk($this->config["disk"])->getDriver()->has($path.$this->getFileName())) {
             \Storage::disk($this->config["disk"])->getDriver()->deleteDir($path);      
         } else {
-            throw new FileNotExistsException();
+            //maybe logging
         }
         
         
