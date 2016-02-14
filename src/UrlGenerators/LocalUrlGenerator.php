@@ -3,9 +3,8 @@
 namespace FabianPimminger\Cargo\UrlGenerators;
 
 use FabianPimminger\Cargo\AttachmentInterface;
-use FabianPimminger\Cargo\PathGenerators\PathGeneratorFactory;
 
-class LocalUrlGenerator implements UrlGeneratorInterface
+class LocalUrlGenerator extends UrlGenerator implements UrlGeneratorInterface
 {
        
     public function getUrl(AttachmentInterface $attachment, $fileName, $style = false)
@@ -15,17 +14,6 @@ class LocalUrlGenerator implements UrlGeneratorInterface
         
        
         return $this->getDomain().$filePath;
-    }
-
-    public function getPath(AttachmentInterface $attachment, $style = false)
-    {
-        $pathGenerator = PathGeneratorFactory::create();
-        
-        if($style != false) {
-            return $pathGenerator->getPathForStyles($attachment).$style."/";
-        } else {
-            return $pathGenerator->getPath($attachment);  
-        }
     }
     
     public function getDomain()
