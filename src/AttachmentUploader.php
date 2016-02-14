@@ -100,10 +100,12 @@ class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInte
         }
        
         // upload new files
-            
-        $this->writeFiles();
         
-        $this->setInstanceModelAttribute($this->config["fields"]["file_name"], $this->getFileName());
+        $filename = $this->getFileName();
+            
+        $this->writeFiles($filename);
+        
+        $this->setInstanceModelAttribute($this->config["fields"]["file_name"], $filename);
         $this->setInstanceModelAttribute($this->config["fields"]["updated_at"], date('Y-m-d H:i:s'));
         
         $this->saveInstanceModel();
@@ -127,7 +129,7 @@ class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInte
         $this->instance->save();
     }
     
-    private function writeFiles()
+    private function writeFiles($filename)
     {
         if(config("cargo.auto_orient")) {
             $image = Image::make($this->file)->orientate(); 
@@ -135,20 +137,20 @@ class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInte
             $image = Image::make($this->file);            
         }
                 
-        $this->writeOriginal($image);
+        $this->writeOriginal($image, $filename);
                 
-        $this->writeStyles($image);
+        $this->writeStyles($image, $filename);
                 
     }
     
-    private function writeOriginal($image)
+    private function writeOriginal($image, $filename)
     {        
         $path = $this->getPath();
         
-        $this->writeFileToStorage($path, $this->getFileName(), $image);
+        $this->writeFileToStorage($path, $filename, $image);
     }
     
-    private function writeStyles($image)
+    private function writeStyles($image, $filename)
     {
         $attachments = $this->instance->registeredAttachments();
         $image->backup("original");
@@ -162,7 +164,7 @@ class AttachmentUploader implements AttachmentInterface, AttachmentProcessorInte
                     
                     $path = $this->getPath($styleName);
                     
-                    $this->writeFileToStorage($path, $this->getFileName(), $image);
+                    $this->writeFileToStorage($path, $filename, $image);
                     
                     $image->reset("original");
                 }
