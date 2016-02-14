@@ -12,9 +12,16 @@ return [
     
     "max_file_size" => 1024 * 3,
 
-    "custom_url_generator_class" => null,
+    "custom_url_generator_class" => \FabianPimminger\Cargo\UrlGenerators\AzureUrlGenerator::class,
     
     "custom_path_generator_class" => null,    
     
-    "filesystem_config" => [],
+    "filesystem_config" => [
+        "azure" => [
+            "domain" => ""
+        ],
+        "s3" => [
+            "domain" => ""
+        ]
+    ],
 ];

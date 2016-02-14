@@ -7,7 +7,7 @@ class AzureUrlGenerator extends LocalUrlGenerator implements UrlGeneratorInterfa
            
     public function getDomain()
     {
-        return config('cargo.azure.domain')."/";
+        return config('cargo.filesystem_config.azure.domain')."/";
     }
 
 }
