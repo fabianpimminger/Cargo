@@ -19,4 +19,12 @@
             "FabianPimminger\\Cargo\\": "src/"
         }
     }
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "FabianPimminger\\Cargo\\": "src/"
+        }
+    }
 }
